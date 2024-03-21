@@ -1,0 +1,13 @@
+[Unit]
+Description=Your GTK Application
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/opt/polvo/polvo
+WorkingDirectory=/opt/polvo/
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
