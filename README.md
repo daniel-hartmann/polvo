@@ -1,3 +1,19 @@
+# Polvo
+
+Polvo is an interface for stem separation using Spleeter and MIDI routing using pi-midi-host.
+The idea is to include some simple effects in the future.
+
+https://github.com/deezer/spleeter
+https://github.com/sinedied/pi-midi-host
+
+
+## Dependencies
+
+Tested using Raspberry Pi 3 Model B+ with Raspberry OS 64-bit Legacy.
+
+You'll need an USB Audio interface. Tested with:
+
+- Roland SP404 MK2
 
 
 ## Installation
@@ -5,5 +21,3 @@
 ```
 bash <(curl -Ls https://raw.githubusercontent.com/daniel-hartmann/polvo/main/setup.sh)
 ```
-
-
