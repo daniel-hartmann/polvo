@@ -17,8 +17,6 @@ CHUNK = 1024
 SILENCE_THRESHOLD = 2.5  # Adjust according to your environment
 SILENCE_DURATION = 3  # in seconds
 
-INPUT_DEVICE_INDEX = 4
-
 # Separator
 INSTRUMENTS = ("vocals", "drums", "bass", "piano", "other")
 NUMBER_OF_STEMS = 5
@@ -43,6 +41,7 @@ class Polvo:
         self.cleanup()
 
         audio = pyaudio.PyAudio()
+        default_index = audio.get_default_output_device_info()["index"]
 
         stream = audio.open(
             format=FORMAT,
@@ -50,7 +49,7 @@ class Polvo:
             rate=RATE,
             input=True,
             frames_per_buffer=CHUNK,
-            input_device_index=INPUT_DEVICE_INDEX,
+            input_device_index=default_index,
         )
 
         self.filename = ""

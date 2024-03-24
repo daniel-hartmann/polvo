@@ -12,8 +12,12 @@ sudo apt-get upgrade -y
 sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev -y
 pip install --upgrade pip
 
+## Install tensorflow
+curl -L https://github.com/PINTO0309/Tensorflow-bin/releases/download/v2.9.0/tensorflow-2.9.0-cp39-none-linux_aarch64.whl -o tensorflow-2.9.0-cp39-none-linux_aarch64.whl
+pip install tensorflow-2.9.0-cp39-none-linux_aarch64.whl
+
 ## Install python requirements
-pip install spleeter PyAudio pydub pycairo PyGObject
+pip install librosa==0.10.1 llvmlite-0.42.0 numba==0.59.1 numpy==1.26.4 spleeter PyAudio pydub pycairo PyGObject
 
 
 # Install Midi Hub
@@ -21,7 +25,7 @@ git clone https://github.com/daniel-hartmann/pi-midi-host
 cd pi-midi-host
 
 ## Optimize for power efficiency and fast boot
-sudo cp cmdline.txt /boot/
+# sudo cp cmdline.txt /boot/
 
 ## Install MIDI autoconnect script
 sudo cp connectall.rb /usr/local/bin/
@@ -68,13 +72,14 @@ echo >> ~/.bashrc
 
 # Install Polvo
 cd /opt
-git clone https://github.com/daniel-hartmann/polvo.git
+sudo git clone https://github.com/daniel-hartmann/polvo.git
 cd polvo
-sudo cp polvo.service /lib/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable polvo.service
-sudo systemctl start polvo.service
-sudo cp config.txt /boot/
+cp polvo.desktop ~/.config/autostart
+# sudo cp polvo.service /lib/systemd/system/
+# sudo systemctl daemon-reload
+# sudo systemctl enable polvo.service
+# sudo systemctl start polvo.service
+# sudo cp config.txt /boot/
 
 ## Make device identifiable more easily on the network
 sudo apt-get install avahi-daemon -y
