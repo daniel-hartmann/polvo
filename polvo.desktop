@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Polvo
+Exec=/opt/polvo/polvo
+Comment=Polvo
+X-GNOME-Autostart-enabled=true

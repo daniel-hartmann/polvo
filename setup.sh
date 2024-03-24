@@ -75,10 +75,6 @@ cd /opt
 sudo git clone https://github.com/daniel-hartmann/polvo.git
 cd polvo
 cp polvo.desktop ~/.config/autostart
-# sudo cp polvo.service /lib/systemd/system/
-# sudo systemctl daemon-reload
-# sudo systemctl enable polvo.service
-# sudo systemctl start polvo.service
 # sudo cp config.txt /boot/
 
 ## Make device identifiable more easily on the network
