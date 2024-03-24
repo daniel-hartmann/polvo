@@ -145,6 +145,7 @@ class PolvoApplication(Gtk.Application):
     def do_activate(self):
         win = PolvoApp(self)
         win.set_decorated(False)
+        win.fullscreen()
         win.show_all()
 
 
