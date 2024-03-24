@@ -9,7 +9,7 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 
 # Install Polvo and Midi Hub dependencies
-sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 -y
+sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev -y
 pip install pyaudio numpy spleeter pydub pycairo PyGObject
 
 
