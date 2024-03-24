@@ -1,10 +1,11 @@
+
 # Polvo
 
 Polvo is an interface for stem separation using Spleeter and MIDI routing using pi-midi-host.
 The idea is to include some simple effects in the future.
 
-[Spleeter](https://github.com/deezer/spleeter) by Deezer
-[pi-midi-host](https://github.com/sinedied/pi-midi-host) by [Yohan Lasorsa](https://github.com/sinedied)
+- [Spleeter](https://github.com/deezer/spleeter) by Deezer
+- [pi-midi-host](https://github.com/sinedied/pi-midi-host) by [Yohan Lasorsa](https://github.com/sinedied)
 
 
 ## Dependencies
