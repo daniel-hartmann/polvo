@@ -10,7 +10,10 @@ sudo apt-get upgrade -y
 
 # Install Polvo and Midi Hub dependencies
 sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev -y
-pip install PyAudio==0.2.14 numpy==1.26.4 spleeter==2.4.0 pydub==0.25.1 pycairo==1.26.0 PyGObject==3.48.1
+pip install --upgrade pip
+
+## Install python requirements
+pip install spleeter PyAudio pydub pycairo PyGObject
 
 
 # Install Midi Hub
