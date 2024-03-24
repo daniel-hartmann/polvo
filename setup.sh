@@ -1,19 +1,16 @@
 #!/usr/bin/bash
 
+# Remove unnecessary stuff
 sudo systemctl disable cups
-
-sudo apt purge -y wolfram-engine libreoffice* scratch* minecraft-pi sonic-pi
+sudo apt purge -y wolfram-engine libreoffice* scratch* sonic-pi cups chromium-browser vlc geany thonny
 sudo apt autoremove -y
 
 sudo apt-get update -y
 sudo apt-get upgrade -y
 
-# Install Polvo dependencies
-sudo apt-get install git portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 -y
+# Install Polvo and Midi Hub dependencies
+sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 -y
 pip install pyaudio numpy spleeter pydub pycairo PyGObject
-
-# Install midi host dependencies
-sudo apt-get install git ruby -y
 
 
 # Install Midi Hub
