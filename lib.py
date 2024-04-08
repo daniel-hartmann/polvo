@@ -37,11 +37,16 @@ class Polvo:
     def stop(self):
         self.user_stopped = True
 
+    def play_last_recording(self):
+        if self.filename:
+            audio = AudioSegment.from_file(self.filename)
+            play(audio)
+
     def listen(self):
         self.cleanup()
 
         audio = pyaudio.PyAudio()
-        default_index = audio.get_default_output_device_info()["index"]
+        default_index = audio.get_default_input_device_info()["index"]
 
         stream = audio.open(
             format=FORMAT,

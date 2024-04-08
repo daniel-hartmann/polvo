@@ -42,17 +42,23 @@ class PolvoApp(Gtk.ApplicationWindow):
         self.main_box.pack_start(self.controls_box, False, True, 0)
 
         # Button to start listening
-        self.listen_button = self.create_record_button("Record")
+        self.listen_button = self.create_button("Record")
         self.listen_button.get_style_context().add_class("record-button")
         self.listen_button.connect("clicked", self.on_listen_clicked)
         self.controls_box.pack_start(self.listen_button, False, True, 0)
 
         # Stop recording button
-        self.stop_button = self.create_record_button("Stop")
+        self.stop_button = self.create_button("Stop")
         self.stop_button.get_style_context().add_class("stop-button")
         self.stop_button.set_sensitive(False)  # Initially disabled
         self.stop_button.connect("clicked", self.on_stop_clicked)
         self.controls_box.pack_start(self.stop_button, False, True, 0)
+
+        # Play button
+        self.play_button = self.create_button("Play")
+        self.play_button.get_style_context().add_class("play-button")
+        self.play_button.connect("clicked", self.on_play_clicked)
+        self.controls_box.pack_start(self.play_button, False, True, 0)
 
         # Create a box for instrument buttons
         instrument_buttons_box = Gtk.Box(
@@ -85,7 +91,7 @@ class PolvoApp(Gtk.ApplicationWindow):
         context_id = self.status_bar.get_context_id("Status")
         self.status_bar.push(context_id, text)
 
-    def create_record_button(self, label):
+    def create_button(self, label):
         button = Gtk.Button(label=label)
         button.set_size_request(200, 200)
         return button
@@ -127,6 +133,12 @@ class PolvoApp(Gtk.ApplicationWindow):
     def on_stop_clicked(self, widget):
         # Stop the recording process
         self.polvo.stop()
+        self.stop_button.set_sensitive(False)  # Disable the stop button
+        self.listen_button.set_sensitive(True)  # Enable the record button
+
+    def on_play_clicked(self, widget):
+        # Play last recording
+        self.polvo.play_last_recording()
         self.stop_button.set_sensitive(False)  # Disable the stop button
         self.listen_button.set_sensitive(True)  # Enable the record button
 
