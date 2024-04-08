@@ -16,8 +16,11 @@ if ! command -v pyenv &> /dev/null
 then
     curl https://pyenv.run | bash
     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile
     echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
     echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+    echo 'eval "$(pyenv init -)"' >> ~/.profile
     . ~/.bashrc
     pyenv install 3.9
     pyenv global 3.9
