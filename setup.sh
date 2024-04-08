@@ -10,7 +10,11 @@ sudo apt-get upgrade -y
 
 # Install Polvo and Midi Hub dependencies
 sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev -y
-pip install --upgrade pip
+
+## Install Python 3.9
+curl https://pyenv.run | bash
+pyenv install 3.9
+pyenv global 3.9
 
 ## Install tensorflow
 curl -L https://github.com/PINTO0309/Tensorflow-bin/releases/download/v2.9.0/tensorflow-2.9.0-cp39-none-linux_aarch64.whl -o tensorflow-2.9.0-cp39-none-linux_aarch64.whl
