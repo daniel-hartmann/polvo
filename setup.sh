@@ -12,9 +12,18 @@ sudo apt-get upgrade -y
 sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev -y
 
 ## Install Python 3.9
-curl https://pyenv.run | bash
-pyenv install 3.9
-pyenv global 3.9
+if ! command -v pyenv &> /dev/null
+then
+    curl https://pyenv.run | bash
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+    echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+    . ~/.bashrc
+    pyenv install 3.9
+    pyenv global 3.9
+fi
+echo "Python 3.9 installed"
+
 
 ## Install tensorflow
 curl -L https://github.com/PINTO0309/Tensorflow-bin/releases/download/v2.9.0/tensorflow-2.9.0-cp39-none-linux_aarch64.whl -o tensorflow-2.9.0-cp39-none-linux_aarch64.whl
