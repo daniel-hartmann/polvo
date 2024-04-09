@@ -75,7 +75,10 @@ class Polvo:
                 self.set_status("Recording started.")
                 recording = True
 
-            if self.user_stopped or (
+            if self.user_stopped and not recording:
+                break
+
+            elif self.user_stopped or (
                 recording and self.is_silence(np.frombuffer(data, dtype=np.int16))
             ):
                 silence_count += 1
