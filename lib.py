@@ -76,6 +76,7 @@ class Polvo:
                 recording = True
 
             if self.user_stopped and not recording:
+                self.set_status("Audio input was not detected.")
                 break
 
             elif self.user_stopped or (
