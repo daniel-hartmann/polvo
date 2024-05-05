@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "PolvoTheme.h"
 #include "Recording.h"
+#include "Mixer.h"
 
 #define BUFFER_SIZE 1024
 
@@ -40,6 +41,7 @@ private:
     std::string outputWavFileName;
     std::vector<std::unique_ptr<Recording>> recordings;
     std::vector<std::unique_ptr<juce::AudioTransportSource>> transportSources;
+    std::vector<juce::Slider*> sliders;
 
     bool isRecording = false;
 
@@ -53,8 +55,10 @@ private:
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::ResamplingAudioSource> resamplingSource;
     std::unique_ptr<juce::AudioTransportSource> transportSource;
+    std::unique_ptr<juce::AudioFormatReader> reader;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
-    std::unique_ptr<juce::MixerAudioSource> mixer;
+    // std::unique_ptr<juce::MixerAudioSource> mixer;
+    std::unique_ptr<Mixer> mixer;
 
     // For recording a wav file
     juce::WavAudioFormat audioFormat;
@@ -71,6 +75,11 @@ private:
     juce::Label bassSliderLabel;
     juce::Label pianoSliderLabel;
     juce::Label otherSliderLabel;
+
+    struct TrackData {
+        const char* filename;
+        std::function<double()> sliderValueGetter;
+    };
 
     juce::TextButton recordButton;
     juce::TextButton stopButton;
@@ -97,15 +106,12 @@ private:
     void stopRecording();
     void actionStopRecording();
 
-    // Play/Pause
+    // Play/Pause and Mixer
     void playPause();
     void playOriginalFile(const juce::File& file);
     void playStemsTogether(const juce::File& file);
-    void loadAndAddStemToMixer(const juce::File& stemFile);
-
-    // Mixer
-    void updateTransportSourceGain(int sourceIndex, double gainInDecibels);
-
+    // void loadAndAddStemToMixer(const juce::File& stemFile);
+    void stopAllTransportSources();
 
     // Call stems separator command
     void callSeparator(const Recording& recording);

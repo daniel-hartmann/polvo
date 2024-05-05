@@ -7,6 +7,11 @@ Stems::Stems() : deviceManager(), transportSource(new juce::AudioTransportSource
         dataPath.createDirectory();
     }
 
+    // mixer.reset(new juce::MixerAudioSource());
+    mixer.reset(new Mixer(&deviceManager));
+    // mixer = std::make_unique<Mixer>();
+
+    deviceManager.initialiseWithDefaultDevices(0, 2);
     sourcePlayer.setSource(transportSource.get());
     deviceManager.addAudioCallback(&sourcePlayer);
     formatManager.registerBasicFormats();
@@ -49,7 +54,6 @@ Stems::Stems() : deviceManager(), transportSource(new juce::AudioTransportSource
 
     // Create and configure status bar
     addAndMakeVisible(statusBar);
-    // statusBar.setColour(juce::Label::backgroundColourId, PolvoColor::dark);
     statusBar.setColour(juce::Label::textColourId, PolvoColor::lightYellow);
     statusBar.setColour(juce::Label::outlineColourId, PolvoColor::lessDark);
     statusBar.setText("Ready", juce::dontSendNotification);
@@ -64,19 +68,22 @@ Stems::~Stems()
 {
     stopRecording();
     setLookAndFeel(nullptr);
+    stopAllTransportSources();
 }
 
 void Stems::setupSlider(juce::Slider & slider, juce::Label & label,
                         const juce::String & text)
 {
+    sliders.push_back(&slider);
+
     label.setText(text, juce::dontSendNotification);
     label.setJustificationType(juce::Justification::left);
     label.setColour(juce::Label::textColourId, PolvoColor::orange);
     juce::Font boldFont(12.0f, juce::Font::bold);
     label.setFont(boldFont);
 
-    slider.setRange(-40.0, 12.0);
-    slider.setValue(10.0);
+    slider.setRange(0.0, 1.0);
+    slider.setValue(0.8);
     slider.setTextBoxStyle(juce::Slider::NoTextBox, false, 80, 20);
 
     addAndMakeVisible(label);
@@ -105,7 +112,6 @@ void Stems::createAndSetupButton(juce::TextButton & button, juce::Label & label,
     label.setJustificationType(juce::Justification::centred);
 
     // Configure button properties
-    // button.setButtonText("");
     button.setColour(juce::TextButton::buttonColourId, buttonColor);
     button.setColour(juce::TextButton::textColourOnId, juce::Colours::white);
     button.setColour(juce::TextButton::textColourOffId, juce::Colours::white);
@@ -161,6 +167,11 @@ void Stems::resized()
     bassSliderLabel.setBounds(margin, offsetY, sliderWidth, labelHeight);
     offsetY += labelHeight;
     bassSlider.setBounds(margin, offsetY, sliderWidth, sliderHeight);
+    offsetY += sliderHeight;
+
+    pianoSliderLabel.setBounds(margin, offsetY, sliderWidth, labelHeight);
+    offsetY += labelHeight;
+    pianoSlider.setBounds(margin, offsetY, sliderWidth, sliderHeight);
     offsetY += sliderHeight;
 
     otherSliderLabel.setBounds(margin, offsetY, sliderWidth, labelHeight);
@@ -335,6 +346,8 @@ void Stems::playPause()
 
 void Stems::playOriginalFile(const juce::File& file)
 {
+    stopAllTransportSources();
+
     juce::AudioDeviceManager::AudioDeviceSetup deviceSetup =
         juce::AudioDeviceManager::AudioDeviceSetup();
     deviceSetup.sampleRate = 48000;
@@ -345,13 +358,14 @@ void Stems::playOriginalFile(const juce::File& file)
     if (reader != nullptr) {
         if (transportSource->isPlaying()) {
             transportSource->stop();
+            transportSource->setSource(nullptr);
 
             setStatus("Paused " + file.getFileName().toStdString());
 
         } else {
             // Create AudioFormatReaderSource and set as transportSource's source
             juce::AudioFormatReaderSource* readerSource = new juce::AudioFormatReaderSource(
-                reader.release(), true);
+                reader.release(), false);
 
             transportSource->setSource(readerSource);
             transportSource->start();
@@ -368,106 +382,102 @@ void Stems::playStemsTogether(const juce::File& file)
 {
     std::cout << "playStemsTogether" << std::endl;
 
+    std::cout << "stopAllTransportSources...\t";
+    stopAllTransportSources();
+    std::cout << "OK" << std::endl;
+
     // Initialize audio device manager if not already initialized
+    std::cout << "initialising device...\t";
     juce::AudioDeviceManager::AudioDeviceSetup deviceSetup;
     deviceSetup.sampleRate = 44100;
     deviceManager.initialise(2, 2, 0, true, {}, &deviceSetup);
+    std::cout << "OK" << std::endl;
 
     // Create a new mixer for managing multiple audio sources
-    mixer.reset(new juce::MixerAudioSource());
+    // std::cout << "reseting mixer...\t";
+    // mixer.reset(new Mixer(&deviceManager));
+    // std::cout << "OK" << std::endl;
 
     // Load and add stems to the mixer
-    for (const auto& stemFilename : { "bass.wav", "drums.wav", "other.wav", "piano.wav", "vocals.wav" }) {
+    int trackIndex = 0;
+
+    std::vector<TrackData> tracks_data = {
+        {"vocals.wav", [&]() { return vocalsSlider.getValue(); }},
+        {"drums.wav", [&]() { return drumsSlider.getValue(); }},
+        {"bass.wav", [&]() { return bassSlider.getValue(); }},
+        {"piano.wav", [&]() { return pianoSlider.getValue(); }},
+        {"other.wav", [&]() { return otherSlider.getValue(); }},
+        // Add more tracks here...
+    };
+
+    std::cout << "Iterating over stems..." << std::endl;
+
+    for (const auto& track : tracks_data) {
+        const char* stemFilename = track.filename;
+        double sliderValue = track.sliderValueGetter();
+
+        std::cout << "trackIndex: " << trackIndex << std::endl;
+
+        std::cout << "getting stem file...\t";
         juce::File stemFile = getStemsFolder(file).getChildFile(stemFilename);
+        std::cout << "OK" << std::endl;
 
         if (stemFile.existsAsFile()) {
-            // Create a new transport source for each stem
-            auto transportSource = std::make_unique<juce::AudioTransportSource>();
-            auto* source = transportSource.get();
-            loadAndAddStemToMixer(stemFile);
-            // loadAndSetupAudioSource(stemFile, source); // Implement this function to load audio data
 
-            mixer->addInputSource(source, true /* deleteWhenRemoved */);
-            transportSources.push_back(std::move(transportSource));
-            std::cout << "Loaded file to mixer: " << stemFile.getFileName() << std::endl;
+            std::cout << "initialising mixer for " << stemFilename << "..." << std::endl;
+            mixer->loadAudioFile(trackIndex, stemFile, sliderValue);
+            std::cout << "initialising mixer: OK" << std::endl;
 
         } else {
             std::cerr << "Warning: Stem file '" << stemFilename << "' not found." << std::endl;
         }
+
+        trackIndex += 1;
     }
 
-    // Set the mixer as the source for the AudioSourcePlayer
-    sourcePlayer.setSource(mixer.get());
-
-    // Start playback
-    transportSource->prepareToPlay(44100, 2); // Adjust parameters as needed
-    transportSource->start();
+    std::cout << "mixer->playPause()" << std::endl << std::endl;
+    mixer->playPause();
 }
 
-
-
-
-
-// mixer->setGain(0, juce::Decibels::decibelsToGain(vocalsSlider.getValue()));
-// mixer->setGain(1, juce::Decibels::decibelsToGain(drumsSlider.getValue()));
-// mixer->setGain(2, juce::Decibels::decibelsToGain(bassSlider.getValue()));
-// mixer->setGain(3, juce::Decibels::decibelsToGain(pianoSlider.getValue()));
-// mixer->setGain(4, juce::Decibels::decibelsToGain(otherSlider.getValue()));
-
-
-
-void Stems::loadAndAddStemToMixer(const juce::File& stemFile)
+void Stems::stopAllTransportSources()
 {
-    std::unique_ptr<juce::AudioFormatReader> reader(formatManager.createReaderFor(
-                stemFile));
+    // Reset mixer
+    // mixer->removeAllInputs();
 
-    if (reader != nullptr) {
-        // Create an AudioFormatReaderSource for the stem
-        juce::AudioFormatReaderSource* readerSource = new juce::AudioFormatReaderSource(
-            reader.release(), true);
+    // Stop and release all transport sources
+    for (auto& source : transportSources) {
+        if (source == nullptr) { continue; }
 
-        // Add the reader source to the mixer
-        mixer->addInputSource(readerSource, true); // true to delete when removed
+        if (source->isPlaying()) {
+            source->stop();
+        }
 
-    } else {
-        std::cerr << "Error: Failed to create AudioFormatReader for stem file: " <<
-                  stemFile.getFileName() << std::endl;
+        source->setSource(nullptr); // Release the source
     }
-}
 
+    transportSources.clear();
+}
 
 void Stems::sliderValueChanged(juce::Slider* slider)
 {
-    // Determine which slider was changed and update corresponding transport source gain
+    std::cout << "Stems::sliderValueChanged" << std::endl;
+
     if (slider == &vocalsSlider) {
-        updateTransportSourceGain(0, vocalsSlider.getValue()); // vocals index in mixer
+        mixer->setGain(0, vocalsSlider.getValue());
 
     } else if (slider == &drumsSlider) {
-        updateTransportSourceGain(1, drumsSlider.getValue()); // drums index in mixer
+        mixer->setGain(1, drumsSlider.getValue());
 
     } else if (slider == &bassSlider) {
-        updateTransportSourceGain(2, bassSlider.getValue()); // bass index in mixer
+        mixer->setGain(2, bassSlider.getValue());
 
     } else if (slider == &pianoSlider) {
-        updateTransportSourceGain(3, pianoSlider.getValue()); // piano index in mixer
+        mixer->setGain(3, pianoSlider.getValue());
 
     } else if (slider == &otherSlider) {
-        updateTransportSourceGain(4, otherSlider.getValue()); // other index in mixer
+        mixer->setGain(4, otherSlider.getValue());
     }
 }
-
-void Stems::updateTransportSourceGain(int sourceIndex, double gainInDecibels)
-{
-    if (sourceIndex < transportSources.size()) {
-        // Convert decibels to gain value
-        float gain = juce::Decibels::decibelsToGain(gainInDecibels);
-
-        // Update the gain of the corresponding transport source
-        transportSources[sourceIndex]->setGain(gain);
-    }
-}
-
-
 
 int Stems::getNumRows()
 {

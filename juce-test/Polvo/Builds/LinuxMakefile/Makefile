@@ -76,6 +76,7 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/MainWindow_499ac812.o \
+  $(JUCE_OBJDIR)/Mixer_d95e2aea.o \
   $(JUCE_OBJDIR)/Recording_5811b2d2.o \
   $(JUCE_OBJDIR)/Stems_ea44292b.o \
   $(JUCE_OBJDIR)/Vectorscope_317b68d2.o \
@@ -124,6 +125,11 @@ $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
 $(JUCE_OBJDIR)/MainWindow_499ac812.o: ../../Source/MainWindow.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling MainWindow.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Mixer_d95e2aea.o: ../../Source/Mixer.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling Mixer.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Recording_5811b2d2.o: ../../Source/Recording.cpp
