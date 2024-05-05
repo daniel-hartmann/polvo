@@ -15,14 +15,16 @@ MainWindow::MainWindow(juce::String name, std::unique_ptr<MainComponent> mainCom
     setResizable(true, true);
     centreWithSize(getWidth(), getHeight());
 #endif
-
-    juce::LookAndFeel::getDefaultLookAndFeel().setDefaultSansSerifTypefaceName("Arimo");
+    setLookAndFeel(&lookAndFeel);
 
     setVisible(true);
-    setBackgroundColour(juce::Colour(0xffc0c0c0));
+    setBackgroundColour(PolvoColor::dark);
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow()
+{
+    setLookAndFeel(nullptr);
+}
 
 void MainWindow::closeButtonPressed()
 {

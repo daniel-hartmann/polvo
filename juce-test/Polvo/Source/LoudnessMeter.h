@@ -4,6 +4,7 @@
 #include <math.h>
 #include <pulse/pulseaudio.h>
 #include "AnalysisData.h"
+#include "PolvoTheme.h"
 
 #define BUFFER_SIZE 1024
 

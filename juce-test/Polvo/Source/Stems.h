@@ -5,7 +5,7 @@
 #include <pulse/pulseaudio.h>
 #include <vector>
 #include <algorithm>
-#include "PolvoLookAndFeel.h"
+#include "PolvoTheme.h"
 #include "Recording.h"
 
 #define BUFFER_SIZE 1024
@@ -30,6 +30,7 @@ public:
     int getNumRows() override;
     void paintListBoxItem(int rowNumber, juce::Graphics& g,
                           int width, int height, bool rowIsSelected) override;
+    void listBoxItemClicked(int row, const juce::MouseEvent&) override;
 
 
 private:
@@ -38,11 +39,24 @@ private:
         juce::File::getCurrentWorkingDirectory().getChildFile("data");
     std::string outputWavFileName;
     std::vector<std::unique_ptr<Recording>> recordings;
+    std::vector<std::unique_ptr<juce::AudioTransportSource>> transportSources;
 
     bool isRecording = false;
 
     PolvoLookAndFeel lookAndFeel;
 
+    juce::Label statusBar;
+
+    // For playing the wav file
+    juce::AudioDeviceManager deviceManager;
+    juce::AudioSourcePlayer sourcePlayer;
+    juce::AudioFormatManager formatManager;
+    std::unique_ptr<juce::ResamplingAudioSource> resamplingSource;
+    std::unique_ptr<juce::AudioTransportSource> transportSource;
+    std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
+    std::unique_ptr<juce::MixerAudioSource> mixer;
+
+    // For recording a wav file
     juce::WavAudioFormat audioFormat;
     std::unique_ptr<juce::AudioFormatWriter> writer;
 
@@ -70,21 +84,42 @@ private:
     juce::TextButton separateButton;
     juce::TextButton deleteButton;
 
+    // juce::Colour recordingsListBGColor = juce::Colour(0xff8b4513);
+    juce::Colour recordingsListBGColor = PolvoColor::darkBlue;
+
     void setupSlider(juce::Slider & slider, juce::Label& label, const juce::String & text);
     void createAndSetupButton(juce::TextButton& button, juce::Label& label,
                               const juce::String& labelText, const juce::Colour& buttonColor,
                               std::function<void()> onClick);
 
-    std::string generateUniqueFileName();
+    // Recording
     void startRecording();
     void stopRecording();
+    void actionStopRecording();
+
+    // Play/Pause
     void playPause();
+    void playOriginalFile(const juce::File& file);
+    void playStemsTogether(const juce::File& file);
+    void loadAndAddStemToMixer(const juce::File& stemFile);
+
+    // Mixer
+    void updateTransportSourceGain(int sourceIndex, double gainInDecibels);
+
+
+    // Call stems separator command
     void callSeparator(const Recording& recording);
 
+    // Recordings list and its actions
     void updateRecordingsList();
     void updateRecording(const juce::File& file);
     void separateStems();
     void deleteSelectedRecording();
+
+    // Utils
+    std::string generateUniqueFileName();
+    juce::File getStemsFolder(const juce::File& selectedFile);
+    void setStatus(std::string status);
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Stems)
 };

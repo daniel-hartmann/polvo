@@ -43,7 +43,7 @@ ifeq ($(CONFIG),Debug)
   JUCE_CPPFLAGS_APP :=  "-DJucePlugin_Build_VST=0" "-DJucePlugin_Build_VST3=0" "-DJucePlugin_Build_AU=0" "-DJucePlugin_Build_AUv3=0" "-DJucePlugin_Build_AAX=0" "-DJucePlugin_Build_Standalone=0" "-DJucePlugin_Build_Unity=0" "-DJucePlugin_Build_LV2=0"
   JUCE_TARGET_APP := Polvo
 
-  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 $(CFLAGS)
+  JUCE_CFLAGS += $(JUCE_CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0 -ggdb3 $(CFLAGS)
   JUCE_CXXFLAGS += $(JUCE_CFLAGS) -std=c++17 $(CXXFLAGS)
   JUCE_LDFLAGS += $(TARGET_ARCH) -L$(JUCE_BINDIR) -L$(JUCE_LIBDIR) $(shell $(PKG_CONFIG) --libs alsa freetype2 libcurl libpulse) -fvisibility=hidden -lrt -ldl -lpthread $(LDFLAGS)
 
@@ -76,7 +76,6 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Main_90ebc5c2.o \
   $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o \
   $(JUCE_OBJDIR)/MainWindow_499ac812.o \
-  $(JUCE_OBJDIR)/PolvoLookAndFeel_28498961.o \
   $(JUCE_OBJDIR)/Recording_5811b2d2.o \
   $(JUCE_OBJDIR)/Stems_ea44292b.o \
   $(JUCE_OBJDIR)/Vectorscope_317b68d2.o \
@@ -125,11 +124,6 @@ $(JUCE_OBJDIR)/MainComponent_a6ffb4a5.o: ../../Source/MainComponent.cpp
 $(JUCE_OBJDIR)/MainWindow_499ac812.o: ../../Source/MainWindow.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling MainWindow.cpp"
-	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
-
-$(JUCE_OBJDIR)/PolvoLookAndFeel_28498961.o: ../../Source/PolvoLookAndFeel.cpp
-	-$(V_AT)mkdir -p $(@D)
-	@echo "Compiling PolvoLookAndFeel.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/Recording_5811b2d2.o: ../../Source/Recording.cpp

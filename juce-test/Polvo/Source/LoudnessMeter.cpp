@@ -23,10 +23,10 @@ void LoudnessMeter::paint(juce::Graphics& g)
     for (float lufs = maxLUFS; lufs >= minLUFS; lufs -= stepLUFS) {
         int y = positionForLevel(lufs);
 
-        g.setColour(lufs == 0.0f ? juce::Colour(120, 120, 120) : juce::Colour(200, 200, 200));
+        g.setColour(lufs == 0.0f ? juce::Colour(150, 150, 150) : juce::Colour(220, 220, 220));
         g.fillRect(xOffset, y, 30, 1); // Adjust the x-coordinate (10) for scale position
 
-        g.setColour(juce::Colour(100, 100, 100));
+        g.setColour(juce::Colour(120, 120, 120));
         g.drawSingleLineText(juce::String(int(lufs)), xOffset + 35, y + 4,
                              juce::Justification::left); // Adjust the x-coordinate (45) for label position
     }
@@ -43,7 +43,7 @@ void LoudnessMeter::paint(juce::Graphics& g)
     juce::Font boldFont(largeFontSize, juce::Font::bold);
 
     g.setFont(boldFont);
-    g.setColour(juce::Colour(0xff8B4513));
+    g.setColour(PolvoColor::orange);
 
     juce::String momentaryText = juce::String(meter.momentary, 1);
     juce::String shortTermText = juce::String(meter.shortTerm, 1);
