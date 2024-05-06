@@ -3,8 +3,7 @@
 #include <JuceHeader.h>
 #include <math.h>
 #include <pulse/pulseaudio.h>
-
-#define BUFFER_SIZE 1024
+#include "Config.h"
 
 class Vectorscope : public juce::Component, private juce::Timer
 {

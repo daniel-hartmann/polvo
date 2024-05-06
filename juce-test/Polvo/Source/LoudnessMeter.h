@@ -3,10 +3,9 @@
 #include <JuceHeader.h>
 #include <math.h>
 #include <pulse/pulseaudio.h>
+#include "Config.h"
 #include "AnalysisData.h"
 #include "PolvoTheme.h"
-
-#define BUFFER_SIZE 1024
 
 class LoudnessMeter : public juce::Component, private juce::Timer
 {

@@ -5,7 +5,8 @@ double MainComponent::momentaryLoudness = 0.0;
 double MainComponent::shortTermLoudness = 0.0;
 
 //==============================================================================
-MainComponent::MainComponent() : stems(), vectorscope(), loudnessMeter()
+MainComponent::MainComponent() : stems(), waveform(), vectorscope(),
+    loudnessMeter()
 {
     setSize(800, 480);
     initPulse();
@@ -13,8 +14,11 @@ MainComponent::MainComponent() : stems(), vectorscope(), loudnessMeter()
     loudnessMeter.startTimers(pa.mainloop);
 
     addAndMakeVisible(stems);
+    addAndMakeVisible(waveform);
     addAndMakeVisible(vectorscope);
     addAndMakeVisible(loudnessMeter);
+
+    stems.setWaveform(waveform);
 }
 
 MainComponent::~MainComponent()
@@ -44,18 +48,22 @@ void MainComponent::paint(juce::Graphics& g)
 void MainComponent::updateChildComponentBounds()
 {
     juce::Rectangle<int> bounds = getLocalBounds();
-    const int margin = 0;
     const int componentHeight = 200; // Adjust as needed
     int thirdWidth = bounds.getWidth() / 3;
 
     // Set bounds for stems component
-    stems.setBounds(bounds.removeFromLeft(thirdWidth).reduced(margin));
+    stems.setBounds(bounds.removeFromLeft(thirdWidth));
 
     // Set bounds for vectorscope component
-    vectorscope.setBounds(bounds.removeFromLeft(thirdWidth).reduced(margin));
+    auto b = bounds.removeFromLeft(thirdWidth);
+
+    vectorscope.setBounds(b.getX(), b.getY(), b.getWidth() , b.getHeight() / 3 * 2);
+    waveform.setBounds(b.getX(), b.getY() + b.getHeight() / 3 * 2, b.getWidth(),
+                       b.getHeight() / 3);
+
 
     // Set bounds for loudnessMeter component
-    loudnessMeter.setBounds(bounds.removeFromLeft(thirdWidth).reduced(margin));
+    loudnessMeter.setBounds(bounds.removeFromLeft(thirdWidth));
 }
 
 
@@ -171,9 +179,10 @@ void MainComponent::handleStreamRead(pa_stream* stream, size_t length)
 
         // Iterate over audio samples and populate buffers
         for (int i = 0; i < length / 2; ++i) {
-            loudnessMeter.meter.buffer[bufferIndex] = audioSamples[i];
-            vectorscope.buffer[bufferIndex] = audioSamples[i];
             stems.buffer[bufferIndex] = audioSamples[i];
+            loudnessMeter.meter.buffer[bufferIndex] = audioSamples[i];
+            waveform.buffer[bufferIndex] = audioSamples[i];
+            vectorscope.buffer[bufferIndex] = audioSamples[i];
 
             // Increment buffer index
             bufferIndex++;

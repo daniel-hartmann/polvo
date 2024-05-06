@@ -131,7 +131,7 @@ void Stems::resized()
     const int height = bounds.getHeight();
 
     const int numSliders = 4;
-    const int labelHeight = 14;
+    const int labelHeight = 10;
     const int sliderHeight = 30;
     const int buttonWidth = 75;
     const int buttonHeight = 50;
@@ -177,10 +177,10 @@ void Stems::resized()
     otherSliderLabel.setBounds(margin, offsetY, sliderWidth, labelHeight);
     offsetY += labelHeight;
     otherSlider.setBounds(margin, offsetY, sliderWidth, sliderHeight);
-    offsetY += sliderHeight + margin;
+    offsetY += sliderHeight + 10;
 
     int listBoxHeight = height - offsetY - buttonHeight - auxButtonHeight - statusBarHeight
-                        - 4 * margin;
+                        - 2 * margin;
     recordingsListBox.setBounds(margin, offsetY, width - 2 * margin, listBoxHeight);
     offsetY += listBoxHeight + 2;
 
@@ -537,6 +537,12 @@ void Stems::listBoxItemClicked(int row, const juce::MouseEvent&)
             bassSlider.setEnabled(false);
             pianoSlider.setEnabled(false);
             otherSlider.setEnabled(false);
+
+            // Get waveform from MainComponent using parent stuff
+            waveform->setFile(selectedFile);
+            waveform->setDisplayMode(Waveform::File);
+
+
         }
 
     } else {
@@ -634,4 +640,9 @@ juce::File Stems::getStemsFolder(const juce::File& selectedFile)
 {
     juce::String baseName = selectedFile.getFileNameWithoutExtension();
     return dataPath.getChildFile(baseName);
+}
+
+void Stems::setWaveform(Waveform& waveformRef)
+{
+    waveform = &waveformRef;
 }

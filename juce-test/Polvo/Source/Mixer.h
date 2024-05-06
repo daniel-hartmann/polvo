@@ -10,6 +10,7 @@
 
 #pragma once
 #include <JuceHeader.h>
+#include "Config.h"
 
 #define NUM_TRACKS 5
 

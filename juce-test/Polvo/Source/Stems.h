@@ -5,12 +5,11 @@
 #include <pulse/pulseaudio.h>
 #include <vector>
 #include <algorithm>
+#include "Config.h"
 #include "PolvoTheme.h"
 #include "Recording.h"
 #include "Mixer.h"
-
-#define BUFFER_SIZE 1024
-
+#include "Waveform.h"
 
 class Stems : public juce::Component, public juce::Slider::Listener,
     public juce::ListBoxModel
@@ -25,6 +24,8 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override;
     void sliderValueChanged(juce::Slider* slider) override;
+
+    void setWaveform(Waveform& waveformRef);
 
     void processAudioData(int numSamples);
 
@@ -42,6 +43,8 @@ private:
     std::vector<std::unique_ptr<Recording>> recordings;
     std::vector<std::unique_ptr<juce::AudioTransportSource>> transportSources;
     std::vector<juce::Slider*> sliders;
+
+    Waveform* waveform = nullptr;
 
     bool isRecording = false;
 

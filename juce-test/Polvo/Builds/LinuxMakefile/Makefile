@@ -80,6 +80,8 @@ OBJECTS_APP := \
   $(JUCE_OBJDIR)/Recording_5811b2d2.o \
   $(JUCE_OBJDIR)/Stems_ea44292b.o \
   $(JUCE_OBJDIR)/Vectorscope_317b68d2.o \
+  $(JUCE_OBJDIR)/Waveform_bbd4cf46.o \
+  $(JUCE_OBJDIR)/BinaryData_ce4232d4.o \
   $(JUCE_OBJDIR)/include_juce_audio_basics_8a4e984a.o \
   $(JUCE_OBJDIR)/include_juce_audio_devices_63111d02.o \
   $(JUCE_OBJDIR)/include_juce_audio_formats_15f82001.o \
@@ -145,6 +147,16 @@ $(JUCE_OBJDIR)/Stems_ea44292b.o: ../../Source/Stems.cpp
 $(JUCE_OBJDIR)/Vectorscope_317b68d2.o: ../../Source/Vectorscope.cpp
 	-$(V_AT)mkdir -p $(@D)
 	@echo "Compiling Vectorscope.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/Waveform_bbd4cf46.o: ../../Source/Waveform.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling Waveform.cpp"
+	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
+
+$(JUCE_OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp
+	-$(V_AT)mkdir -p $(@D)
+	@echo "Compiling BinaryData.cpp"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) -o "$@" -c "$<"
 
 $(JUCE_OBJDIR)/include_juce_audio_basics_8a4e984a.o: ../../JuceLibraryCode/include_juce_audio_basics.cpp

@@ -3,11 +3,11 @@
 #include <cmath>
 #include <pulse/pulseaudio.h>
 #include <JuceHeader.h>
+#include "Config.h"
 #include "Stems.h"
 #include "Vectorscope.h"
+#include "Waveform.h"
 #include "LoudnessMeter.h"
-
-#define BUFFER_SIZE 1024
 
 static struct {
     char *sink;
@@ -55,6 +55,7 @@ private:
     //==============================================================================
     Stems stems;
     Vectorscope vectorscope;
+    Waveform waveform;
     LoudnessMeter loudnessMeter;
 
     void updateChildComponentBounds();
