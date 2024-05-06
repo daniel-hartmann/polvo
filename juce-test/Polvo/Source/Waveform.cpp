@@ -26,11 +26,9 @@ void Waveform::paint(juce::Graphics& g)
 {
     if (currentMode == Buffer) {
         paintFromBuffer(g);
-        DBG("Drawing from Buffer");
 
     } else if (currentMode == File) {
         paintFromFile(g);
-        DBG("Drawing from File");
     }
 }
 
@@ -76,7 +74,7 @@ void Waveform::setFile(const juce::File& file)
 
     if (reader != nullptr) {
         thumbnail.setSource(new juce::FileInputSource(file));
-        repaint(); // Trigger repaint to update waveform
+        repaint();
     }
 }
 
