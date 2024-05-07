@@ -1,5 +1,13 @@
 #!/usr/bin/bash
 
+cd /opt
+
+# Download stuff
+sudo git clone https://github.com/daniel-hartmann/polvo.git
+wget https://github.com/juce-framework/JUCE/releases/download/7.0.12/juce-7.0.12-linux.zip
+git clone https://github.com/daniel-hartmann/pi-midi-host
+git clone https://github.com/oxesoft/bluez
+
 # Remove unnecessary stuff
 sudo systemctl disable cups
 sudo apt purge -y wolfram-engine libreoffice* scratch* sonic-pi cups chromium-browser vlc geany thonny
@@ -9,7 +17,15 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 
 # Install Polvo and Midi Hub dependencies
-sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev -y
+sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev libcairo2-dev libgirepository1.0-dev -y
+
+
+
+## Install JUCE
+unzip juce-7.0.12-linux.zip
+cd JUCE
+
+
 
 ## Install Python 3.9
 if ! command -v pyenv &> /dev/null
@@ -39,11 +55,11 @@ curl -L https://github.com/PINTO0309/Tensorflow-bin/releases/download/v2.9.0/ten
 pip install tensorflow-2.9.0-cp39-none-linux_aarch64.whl
 
 ## Install python requirements
-pip install librosa==0.10.1 llvmlite-0.42.0 numba==0.59.1 numpy==1.26.4 spleeter PyAudio pydub pycairo PyGObject
+pip install librosa==0.10.1 llvmlite==0.42.0 numba==0.59.1 numpy==1.26.4 spleeter PyAudio pydub pycairo PyGObject
 
 
 # Install Midi Hub
-git clone https://github.com/daniel-hartmann/pi-midi-host
+
 cd pi-midi-host
 
 ## Optimize for power efficiency and fast boot
@@ -63,7 +79,7 @@ sudo systemctl start midi.service
 sudo apt-get install midisport-firmware -y
 
 ## Setup MIDI bluetooth
-git clone https://github.com/oxesoft/bluez
+
 sudo apt-get install -y autotools-dev libtool autoconf
 sudo apt-get install -y libasound2-dev
 sudo apt-get install -y libusb-dev libdbus-1-dev libglib2.0-dev libudev-dev libical-dev libreadline-dev
@@ -96,6 +112,7 @@ echo >> ~/.bashrc
 cd /opt
 sudo git clone https://github.com/daniel-hartmann/polvo.git
 cd polvo
+mkidir -p ~/.config/autostart
 cp polvo.desktop ~/.config/autostart
 # sudo cp config.txt /boot/
 
@@ -104,6 +121,15 @@ sudo apt-get install avahi-daemon -y
 sudo sed -i -- 's/raspberrypi/polvo/g' /etc/hostname /etc/hosts
 sudo hostname polvo
 
+## Change resolution
+export DISPLAY=:0
+resolution="800 480 60"
+
+modename="POLVO_800x480_60"
+display=$(xrandr | grep -Po '.+(?=\sconnected)')
+xrandr --newmode $modename $(gtf $(echo $resolution) | grep -oP '(?<="\s\s).+')
+xrandr --addmode $display $modename     
+xrandr --output $display --mode $modename
 
 read -p "Press [enter] to reboot"
 sudo reboot
