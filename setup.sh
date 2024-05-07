@@ -1,9 +1,11 @@
 #!/usr/bin/bash
 
 cd /opt
+sudo chown -R $USER:$USER /opt
+
 
 # Download stuff
-sudo git clone https://github.com/daniel-hartmann/polvo.git
+git clone https://github.com/daniel-hartmann/polvo.git
 wget https://github.com/juce-framework/JUCE/releases/download/7.0.12/juce-7.0.12-linux.zip
 git clone https://github.com/daniel-hartmann/pi-midi-host
 git clone https://github.com/oxesoft/bluez
@@ -17,15 +19,12 @@ sudo apt-get update -y
 sudo apt-get upgrade -y
 
 # Install Polvo and Midi Hub dependencies
-sudo apt-get install git ruby portaudio19-dev libsndfile1 ffmpeg python3-tk python3-gi gir1.2-gtk-3.0 libblas-dev libcairo2-dev libgirepository1.0-dev -y
+sudo apt install git ffmpeg libsndfile1 avahi-daemon pkg-config libhdf5-dev -y
+# For compiling Polvo
+sudo apt install libasound2-dev libpulse-dev libwebkit2gtk-4.0-dev libgtk-3-dev juce-modules-source -y
 
-
-
-## Install JUCE
-unzip juce-7.0.12-linux.zip
-cd JUCE
-
-
+## Extract JUCE
+unzip -d polvo/ juce-7.0.12-linux.zip
 
 ## Install Python 3.9
 if ! command -v pyenv &> /dev/null
@@ -50,12 +49,13 @@ fi
 echo "Python 3.9 installed"
 
 
-## Install tensorflow
-curl -L https://github.com/PINTO0309/Tensorflow-bin/releases/download/v2.9.0/tensorflow-2.9.0-cp39-none-linux_aarch64.whl -o tensorflow-2.9.0-cp39-none-linux_aarch64.whl
-pip install tensorflow-2.9.0-cp39-none-linux_aarch64.whl
+# ## Install tensorflow
+# curl -L https://github.com/PINTO0309/Tensorflow-bin/releases/download/v2.9.0/tensorflow-2.9.0-cp39-none-linux_aarch64.whl -o tensorflow-2.9.0-cp39-none-linux_aarch64.whl
+# pip install --user --break-system-packages tensorflow-2.9.0-cp39-none-linux_aarch64.whl
 
 ## Install python requirements
-pip install librosa==0.10.1 llvmlite==0.42.0 numba==0.59.1 numpy==1.26.4 spleeter PyAudio pydub pycairo PyGObject
+pip install spleeter
+# pip install librosa==0.10.1 llvmlite==0.42.0 numba==0.59.1 numpy==1.26.4 spleeter PyAudio pydub pycairo PyGObject
 
 
 # Install Midi Hub
@@ -109,15 +109,16 @@ echo >> ~/.bashrc
 
 
 # Install Polvo
-cd /opt
-sudo git clone https://github.com/daniel-hartmann/polvo.git
-cd polvo
+cd /opt/polvo/Polvo/Builds/LinuxMakefile
+make
+
+
+
 mkidir -p ~/.config/autostart
 cp polvo.desktop ~/.config/autostart
 # sudo cp config.txt /boot/
 
 ## Make device identifiable more easily on the network
-sudo apt-get install avahi-daemon -y
 sudo sed -i -- 's/raspberrypi/polvo/g' /etc/hostname /etc/hosts
 sudo hostname polvo
 
@@ -130,6 +131,9 @@ display=$(xrandr | grep -Po '.+(?=\sconnected)')
 xrandr --newmode $modename $(gtf $(echo $resolution) | grep -oP '(?<="\s\s).+')
 xrandr --addmode $display $modename     
 xrandr --output $display --mode $modename
+
+systemctl --user enable pulseaudio
+systemctl --user start pulseaudio
 
 read -p "Press [enter] to reboot"
 sudo reboot
