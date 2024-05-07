@@ -5,11 +5,11 @@ What is missing:
 - update setup.sh
 
 
-
 # Polvo
 
-Polvo is an interface for stem separation using Spleeter and MIDI routing using pi-midi-host.
-It runs on Raspberry Pi 5. My idea is to have an extension hardware for the SP404 Mk2.
+Polvo is a Raspberry Pi 5 interface for stem separation using Spleeter.
+Also works as MIDI routing using pi-midi-host.
+My idea is to have an extension hardware for the SP404 Mk2.
 
 - [Spleeter](https://github.com/deezer/spleeter) by Deezer
 - [JUCE](https://juce.com/get-juce/)
