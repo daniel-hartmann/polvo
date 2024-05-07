@@ -5,3 +5,4 @@ pretrained_models/
 venv/
 __pycache__
 .python-version
+JUCE

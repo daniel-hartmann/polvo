@@ -11,12 +11,13 @@ Polvo is an interface for stem separation using Spleeter and MIDI routing using 
 It runs on Raspberry Pi 5. My idea is to have an extension hardware for the SP404 Mk2.
 
 - [Spleeter](https://github.com/deezer/spleeter) by Deezer
+- [JUCE](https://juce.com/get-juce/)
 - [pi-midi-host](https://github.com/sinedied/pi-midi-host) by [Yohan Lasorsa](https://github.com/sinedied)
 
 
 ## Dependencies
 
-Tested using Raspberry Pi 3 Model B+ with Raspberry OS 64-bit Legacy.
+Untested.
 
 You'll need an USB Audio interface. Tested with:
 
