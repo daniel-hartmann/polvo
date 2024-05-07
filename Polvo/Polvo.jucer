@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="jGpDWl" name="Polvo" projectType="guiapp" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+  <MAINGROUP id="oqgxEm" name="Polvo">
+    <GROUP id="{0FB59E70-A5CB-EF19-CEB7-CCA807FAEA4B}" name="Source">
+      <FILE id="n3NZy4" name="AnalysisData.h" compile="0" resource="0" file="Source/AnalysisData.h"/>
+      <FILE id="zYRE0G" name="Config.h" compile="0" resource="1" file="Source/Config.h"/>
+      <FILE id="JmiegQ" name="LoudnessMeter.cpp" compile="1" resource="0"
+            file="Source/LoudnessMeter.cpp"/>
+      <FILE id="AH4FHI" name="LoudnessMeter.h" compile="0" resource="0" file="Source/LoudnessMeter.h"/>
+      <FILE id="blrMVQ" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="O6WOwl" name="Main.h" compile="0" resource="0" file="Source/Main.h"/>
+      <FILE id="JFzsQ1" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="zO9i0G" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="sMiiY7" name="MainWindow.cpp" compile="1" resource="0" file="Source/MainWindow.cpp"/>
+      <FILE id="JIHCCO" name="MainWindow.h" compile="0" resource="0" file="Source/MainWindow.h"/>
+      <FILE id="XvgLqY" name="Mixer.cpp" compile="1" resource="0" file="Source/Mixer.cpp"/>
+      <FILE id="IlcXhk" name="Mixer.h" compile="0" resource="0" file="Source/Mixer.h"/>
+      <FILE id="FWOA6k" name="PolvoTheme.h" compile="0" resource="0" file="Source/PolvoTheme.h"/>
+      <FILE id="ujMncc" name="Recording.cpp" compile="1" resource="0" file="Source/Recording.cpp"/>
+      <FILE id="iykzQe" name="Recording.h" compile="0" resource="0" file="Source/Recording.h"/>
+      <FILE id="JnJ0yv" name="Stems.cpp" compile="1" resource="0" file="Source/Stems.cpp"/>
+      <FILE id="ZVTO5J" name="Stems.h" compile="0" resource="0" file="Source/Stems.h"/>
+      <FILE id="QSmRKo" name="Vectorscope.cpp" compile="1" resource="0" file="Source/Vectorscope.cpp"/>
+      <FILE id="G2sFJe" name="Vectorscope.h" compile="0" resource="0" file="Source/Vectorscope.h"/>
+      <FILE id="NVowtG" name="Waveform.cpp" compile="1" resource="0" file="Source/Waveform.cpp"/>
+      <FILE id="z75Jfp" name="Waveform.h" compile="0" resource="0" file="Source/Waveform.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+  <EXPORTFORMATS>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile" linuxExtraPkgConfig="libpulse">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Polvo" extraCompilerFlags="-ggdb3"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Polvo"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+</JUCERPROJECT>
