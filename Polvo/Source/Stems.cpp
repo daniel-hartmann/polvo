@@ -351,7 +351,7 @@ void Stems::playOriginalFile(const juce::File& file)
     juce::AudioDeviceManager::AudioDeviceSetup deviceSetup =
         juce::AudioDeviceManager::AudioDeviceSetup();
     deviceSetup.sampleRate = 48000;
-    deviceManager.initialise(2, 2, 0, true, {}, &deviceSetup);
+    deviceManager.initialise(0, 2, 0, true, {}, &deviceSetup);
 
     std::unique_ptr<juce::AudioFormatReader> reader(formatManager.createReaderFor(file));
 
@@ -390,7 +390,7 @@ void Stems::playStemsTogether(const juce::File& file)
     std::cout << "initialising device...\t";
     juce::AudioDeviceManager::AudioDeviceSetup deviceSetup;
     deviceSetup.sampleRate = 44100;
-    deviceManager.initialise(2, 2, 0, true, {}, &deviceSetup);
+    deviceManager.initialise(0, 2, 0, true, {}, &deviceSetup);
     std::cout << "OK" << std::endl;
 
     // Create a new mixer for managing multiple audio sources
